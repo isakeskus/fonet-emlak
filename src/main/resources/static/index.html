@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fonet Emlak İşletmeleri</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Özel CSS -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="bg-light">
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
+        <div class="container">
+            <a class="navbar-brand" href="#"><i class="fas fa-home me-2"></i>Fonet Emlak</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#" data-section="dashboard">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-section="isyeri">İşyeri Tanımı</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-section="musteri">Müşteri Tanımı</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-section="emlak">Emlak Tanımı</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-section="arama">Emlak Arama</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Ana İçerik -->
+    <div class="container mt-4 mb-5">
+        
+        <!-- Dashboard Section -->
+        <section id="dashboard" class="content-section">
+            <h2 class="mb-4">Kontrol Paneli</h2>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="card text-white bg-success mb-3 shadow">
+                        <div class="card-body">
+                            <h5 class="card-title"><i class="fas fa-users"></i> Toplam Müşteri</h5>
+                            <p class="card-text display-4" id="statMusteri">0</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card text-white bg-info mb-3 shadow">
+                        <div class="card-body">
+                            <h5 class="card-title"><i class="fas fa-building"></i> Toplam Emlak</h5>
+                            <p class="card-text display-4" id="statEmlak">0</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card text-white bg-warning mb-3 shadow">
+                        <div class="card-body">
+                            <h5 class="card-title"><i class="fas fa-store"></i> İşyeri Bilgisi</h5>
+                            <p class="card-text h4 mt-3" id="statIsyeri">Kayıt Bekleniyor</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card text-white bg-dark mb-3 shadow">
+                        <div class="card-body">
+                            <h5 class="card-title"><i class="fas fa-handshake"></i> Tamamlanan İşlem (Satıldı/Kiralandı)</h5>
+                            <p class="card-text display-4" id="statTamamlanan">0</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card text-white bg-danger mb-3 shadow">
+                        <div class="card-body">
+                            <h5 class="card-title"><i class="fas fa-sack-dollar"></i> Toplam Komisyon Geliri</h5>
+                            <p class="card-text display-4" id="statKomisyon">₺0</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-2">
+                <div class="col-md-6 mx-auto">
+                    <div class="card shadow">
+                        <div class="card-body">
+                            <h5 class="card-title text-center mb-3"><i class="fas fa-chart-pie"></i> Emlak Dağılımı</h5>
+                            <canvas id="emlakChart" height="200"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- İşyeri Tanımı Section -->
+        <section id="isyeri" class="content-section d-none">
+            <h2 class="mb-4">İşyeri Tanımı</h2>
+            <div class="card shadow">
+                <div class="card-body">
+                    <form id="isyeriForm">
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label">İşletme Adı</label>
+                                <input type="text" class="form-control" id="isletmeAdi" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Yetkili Kişi</label>
+                                <input type="text" class="form-control" id="yetkili" required>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <label class="form-label">Telefon</label>
+                                <input type="text" class="form-control" id="isyeriTel">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Faks</label>
+                                <input type="text" class="form-control" id="isyeriFax">
+                            </div>
+                            <div class="col-md-12 mt-3">
+                                <label class="form-label">Adres</label>
+                                <textarea class="form-control" id="isyeriAdres" rows="2"></textarea>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Kaydet</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- Müşteri Tanımı Section -->
+        <section id="musteri" class="content-section d-none">
+            <h2 class="mb-4">Müşteri Tanımı</h2>
+            <div class="card shadow mb-4">
+                <div class="card-body">
+                    <form id="musteriForm">
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Ad</label>
+                                <input type="text" class="form-control" id="musteriAd" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Soyad</label>
+                                <input type="text" class="form-control" id="musteriSoyad" required>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <label class="form-label">Cep Telefonu</label>
+                                <input type="text" class="form-control" id="musteriCep">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Ev Telefonu</label>
+                                <input type="text" class="form-control" id="musteriEv">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">E-Posta</label>
+                                <input type="email" class="form-control" id="musteriEmail">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary" id="musteriSubmitBtn"><i class="fas fa-user-plus"></i> Kaydet</button>
+                        <button type="button" class="btn btn-secondary d-none" id="musteriIptalBtn" onclick="cancelMusteriEdit()">İptal</button>
+                    </form>
+                </div>
+            </div>
+            
+            <h4 class="mb-3">Kayıtlı Müşteriler</h4>
+            <div class="table-responsive bg-white shadow-sm p-3 rounded">
+                <table class="table table-hover">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>ID</th>
+                            <th>Ad Soyad</th>
+                            <th>Cep Telefonu</th>
+                            <th>E-Posta</th>
+                            <th>İşlemler</th>
+                        </tr>
+                    </thead>
+                    <tbody id="musteriTableBody">
+                        <!-- JS ile doldurulacak -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Emlak Tanımı Section -->
+        <section id="emlak" class="content-section d-none">
+            <h2 class="mb-4">Emlak Tanımı</h2>
+            <div class="card shadow">
+                <div class="card-body">
+                    <form id="emlakForm">
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <label class="form-label">Müşteri (Satıcı/Kiralayan)</label>
+                                <select class="form-select" id="emlakMusteri" required>
+                                    <option value="">Seçiniz...</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">İşlem Türü</label>
+                                <select class="form-select" id="emlakIslem" required>
+                                    <option value="KİRALIK">Kiralık</option>
+                                    <option value="SATILIK">Satılık</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Emlak Türü</label>
+                                <select class="form-select" id="emlakTuru" required>
+                                    <option value="DAİRE">Daire</option>
+                                    <option value="VİLLA">Villa</option>
+                                    <option value="ARSA">Arsa</option>
+                                    <option value="DÜKKAN">Dükkan</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-3">
+                                <label class="form-label">Metrekare (m²)</label>
+                                <input type="number" class="form-control" id="emlakM2" required min="1">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Oda Sayısı</label>
+                                <input type="number" class="form-control" id="emlakOda" min="0">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Salon Sayısı</label>
+                                <input type="number" class="form-control" id="emlakSalon" min="0">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Bulunduğu Kat</label>
+                                <input type="number" class="form-control" id="emlakBulunduguKat">
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <label class="form-label">Bina Kat Sayısı</label>
+                                <input type="number" class="form-control" id="emlakBinaKati" min="1">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Isınma Türü</label>
+                                <select class="form-select" id="emlakIsinma">
+                                    <option value="">Seçiniz...</option>
+                                    <option value="DOĞALGAZ">Doğalgaz</option>
+                                    <option value="KOMBİ">Kombi</option>
+                                    <option value="MERKEZİ">Merkezi Sistem</option>
+                                    <option value="SOBA">Soba</option>
+                                    <option value="KLIMA">Klima</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Fiyat (TL)</label>
+                                <input type="number" class="form-control" id="emlakFiyat" required min="0" step="0.01">
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <label class="form-label">Komisyon Oranı (%)</label>
+                                <input type="number" class="form-control" id="emlakKomisyon" min="0" max="100" step="0.1" value="2">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Durum</label>
+                                <select class="form-select" id="emlakDurum">
+                                    <option value="AKTİF">Aktif</option>
+                                    <option value="TAMAMLANDI">Tamamlandı (Satıldı/Kiralandı)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary" id="emlakSubmitBtn"><i class="fas fa-plus"></i> Emlak Kaydet</button>
+                        <button type="button" class="btn btn-secondary d-none" id="emlakIptalBtn" onclick="cancelEmlakEdit()">İptal</button>
+                    </form>
+                </div>
+            </div>
+
+            <h4 class="mb-3 mt-4">Kayıtlı Emlaklar</h4>
+            <div class="table-responsive bg-white shadow-sm p-3 rounded">
+                <table class="table table-hover">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>ID</th>
+                            <th>İşlem</th>
+                            <th>Tür</th>
+                            <th>m²</th>
+                            <th>Oda</th>
+                            <th>Fiyat</th>
+                            <th>Komisyon</th>
+                            <th>Durum</th>
+                            <th>Müşteri</th>
+                            <th>İşlemler</th>
+                        </tr>
+                    </thead>
+                    <tbody id="emlakTableBody">
+                        <!-- JS ile doldurulacak -->
+                    </tbody>
+                </table>
+                <div class="d-flex justify-content-between align-items-center">
+                    <small class="text-muted" id="emlakSayfaBilgi"></small>
+                    <div>
+                        <button class="btn btn-sm btn-outline-secondary" id="emlakOncekiBtn" onclick="emlakSayfaDegistir(-1)"><i class="fas fa-chevron-left"></i> Önceki</button>
+                        <button class="btn btn-sm btn-outline-secondary" id="emlakSonrakiBtn" onclick="emlakSayfaDegistir(1)">Sonraki <i class="fas fa-chevron-right"></i></button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Emlak Arama Section -->
+        <section id="arama" class="content-section d-none">
+            <h2 class="mb-4">Emlak Arama</h2>
+            <div class="card shadow mb-4">
+                <div class="card-body bg-light">
+                    <form id="aramaForm" class="row g-3 align-items-end">
+                        <div class="col-md-3">
+                            <label class="form-label">İşlem Türü</label>
+                            <select class="form-select" id="araIslemTuru">
+                                <option value="KİRALIK">Kiralık</option>
+                                <option value="SATILIK">Satılık</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Emlak Türü</label>
+                            <select class="form-select" id="araEmlakTuru">
+                                <option value="">Tümü</option>
+                                <option value="DAİRE">Daire</option>
+                                <option value="VİLLA">Villa</option>
+                                <option value="ARSA">Arsa</option>
+                                <option value="DÜKKAN">Dükkan</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Min m²</label>
+                            <input type="number" class="form-control" id="araMinM2" min="0">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Max m²</label>
+                            <input type="number" class="form-control" id="araMaxM2" min="0">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Min Oda</label>
+                            <input type="number" class="form-control" id="araMinOda" min="0">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Max Oda</label>
+                            <input type="number" class="form-control" id="araMaxOda" min="0">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Isınma Türü</label>
+                            <select class="form-select" id="araIsinma">
+                                <option value="">Tümü</option>
+                                <option value="DOĞALGAZ">Doğalgaz</option>
+                                <option value="KOMBİ">Kombi</option>
+                                <option value="MERKEZİ">Merkezi Sistem</option>
+                                <option value="SOBA">Soba</option>
+                                <option value="KLIMA">Klima</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Max Fiyat (TL)</label>
+                            <input type="number" class="form-control" id="araMaxFiyat" min="0" step="0.01">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Durum</label>
+                            <select class="form-select" id="araDurum">
+                                <option value="">Tümü</option>
+                                <option value="AKTİF">Aktif</option>
+                                <option value="TAMAMLANDI">Tamamlandı (Satıldı/Kiralandı)</option>
+                            </select>
+                        </div>
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i> Ara</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div id="printArea">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h4>Arama Sonuçları</h4>
+                    <button class="btn btn-secondary" onclick="window.print()"><i class="fas fa-print"></i> Yazdır</button>
+                </div>
+                <div class="table-responsive bg-white shadow-sm p-3 rounded">
+                    <table class="table table-bordered table-striped">
+                        <thead class="table-primary">
+                            <tr>
+                                <th>İşlem</th>
+                                <th>Emlak</th>
+                                <th>m²</th>
+                                <th>Oda</th>
+                                <th>Bul. Kat</th>
+                                <th>Bina Kat</th>
+                                <th>Isınma</th>
+                                <th>Fiyat</th>
+                                <th>Komisyon</th>
+                                <th>Durum</th>
+                                <th>Müşteri</th>
+                            </tr>
+                        </thead>
+                        <tbody id="aramaTableBody">
+                            <tr><td colspan="11" class="text-center text-muted">Arama yapmak için yukarıdaki formu kullanın.</td></tr>
+                        </tbody>
+                    </table>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <small class="text-muted" id="aramaSayfaBilgi"></small>
+                        <div>
+                            <button class="btn btn-sm btn-outline-secondary" id="aramaOncekiBtn" onclick="aramaSayfaDegistir(-1)"><i class="fas fa-chevron-left"></i> Önceki</button>
+                            <button class="btn btn-sm btn-outline-secondary" id="aramaSonrakiBtn" onclick="aramaSayfaDegistir(1)">Sonraki <i class="fas fa-chevron-right"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <!-- Özel JS -->
+    <script src="js/app.js"></script>
+</body>
+</html>
