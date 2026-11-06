@@ -5,7 +5,7 @@ Fonet Bilgi Teknolojileri A.Ş. Java Yazılım Geliştirme Aday Projesi (BT-KL-1
 ## Teknolojiler
 
 - **Backend:** Java 17, Spring Boot 3.1, Spring Data JPA
-- **Frontend:** HTML5, CSS3, JavaScript, Bootstrap 5, Chart.js
+- **Frontend:** React 18 (Vite), axios, react-router, Bootstrap 5, Chart.js
 - **Veritabanı:** H2 (geliştirme), PostgreSQL (prod - docker-compose hazır)
 
 ## Modüller
@@ -45,6 +45,22 @@ mvn spring-boot:run -Dspring-boot.run.profiles=postgres
 
 > PostgreSQL JDBC sürücüsü `pom.xml`'e eklenmiş ve `postgres` profili (`application-postgres.properties`) kullanıma hazır durumdadır.
 
+### React Arayüzü
+
+Arayüzün kaynak kodu `frontend/` klasöründedir. Derlenmiş hali `src/main/resources/static` içinde olduğundan,
+uygulamayı çalıştırmak için Node.js gerekmez; `mvn spring-boot:run` arayüzü de http://localhost:8080 adresinden sunar.
+
+Arayüz üzerinde çalışmak için (backend açıkken):
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+Tarayıcıda: http://localhost:5174 (`/api` istekleri Vite proxy ile 8080'e yönlendirilir).  
+Değişiklikten sonra `npm run build` çalıştırılır; çıktı doğrudan `src/main/resources/static` klasörüne yazılır.
+
 ## Senaryo Testi
 
 1. **İşyeri Tanımı** → Emlak işletmesi bilgilerini kaydedin
@@ -81,8 +97,11 @@ src/main/java/com/fonet/emlak/
 ├── model/         Entity sınıfları
 └── dto/           API response ve arama kriterleri
 
-src/main/resources/static/
-├── index.html     Ana arayüz
-├── css/style.css
-└── js/app.js      Frontend mantığı
+frontend/          React arayüzü kaynağı (Vite, axios, react-router)
+├── src/pages/     Dashboard, İşyeri, Müşteri, Emlak, Arama
+├── src/api/       axios istemcisi ve servis çağrıları
+├── src/hooks/     Sayfalı veri hook'u
+└── src/components/
+
+src/main/resources/static/   Derlenmiş React arayüzü (npm run build çıktısı)
 ```
