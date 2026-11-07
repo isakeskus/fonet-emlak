@@ -18,7 +18,13 @@ export default function useSayfaliVeri(getir, { aktif = true } = {}) {
 
     getir(sayfa)
       .then((d) => {
-        if (!iptal) setVeri(d);
+        if (iptal) return;
+        // Son sayfadaki kayıtlar silindiyse sayfa sayısı azalır; son geçerli sayfaya dön.
+        if (d.totalPages > 0 && sayfa >= d.totalPages) {
+          setSayfa(d.totalPages - 1);
+          return;
+        }
+        setVeri(d);
       })
       .catch((e) => {
         if (!iptal) setHata(e.userMessage || 'Veri alınamadı.');
